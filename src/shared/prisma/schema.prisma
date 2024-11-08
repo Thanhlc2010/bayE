@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model carmakes {
+  MakeID    BigInt      @id @unique(map: "MakeID") @default(autoincrement()) @db.UnsignedBigInt
+  Name      String      @unique(map: "Name") @db.VarChar(50)
+  carmodels carmodels[]
+  cars      cars[]
+}
+
+model carmodels {
+  ModelID  BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  MakeID   BigInt?   @db.UnsignedBigInt
+  Name     String    @unique(map: "Name") @db.VarChar(50)
+  carmakes carmakes? @relation(fields: [MakeID], references: [MakeID], onDelete: NoAction, onUpdate: NoAction, map: "carmodels_ibfk_1")
+  cars     cars[]
+
+  @@index([MakeID], map: "MakeID")
+}
+
+model cars {
+  CarID                      BigInt              @id @unique(map: "CarID") @default(autoincrement()) @db.UnsignedBigInt
+  MakeID                     BigInt?             @db.UnsignedBigInt
+  ModelID                    BigInt?             @db.UnsignedBigInt
+  Year                       Int?
+  ConditionID                cars_ConditionID
+  Price                      Decimal             @db.Decimal(10, 2)
+  Status                     String?             @db.VarChar(20)
+  SellerID                   BigInt?             @db.UnsignedBigInt
+  BuyerID                    BigInt?             @db.UnsignedBigInt
+  MaxPrice                   Decimal?            @db.Decimal(10, 2)
+  InstallmentTermMonths      Int?
+  InterestRatePercent        Decimal?            @db.Decimal(5, 2)
+  DownPayment                Decimal?            @db.Decimal(10, 2)
+  CreatedAt                  DateTime?           @default(now()) @db.Timestamp(0)
+  SoldAt                     DateTime?           @db.Timestamp(0)
+  carmakes                   carmakes?           @relation(fields: [MakeID], references: [MakeID], onDelete: NoAction, onUpdate: NoAction, map: "cars_ibfk_1")
+  carmodels                  carmodels?          @relation(fields: [ModelID], references: [ModelID], onDelete: NoAction, onUpdate: NoAction, map: "cars_ibfk_2")
+  users_cars_SellerIDTousers users?              @relation("cars_SellerIDTousers", fields: [SellerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "cars_ibfk_3")
+  users_cars_BuyerIDTousers  users?              @relation("cars_BuyerIDTousers", fields: [BuyerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "cars_ibfk_4")
+  cartags                    cartags[]
+  testdriverequests          testdriverequests[]
+
+  @@index([BuyerID], map: "BuyerID")
+  @@index([MakeID], map: "MakeID")
+  @@index([ModelID], map: "ModelID")
+  @@index([SellerID], map: "SellerID")
+}
+
+model cartags {
+  CarID BigInt @db.UnsignedBigInt
+  TagID BigInt @db.UnsignedBigInt
+  cars  cars   @relation(fields: [CarID], references: [CarID], onDelete: NoAction, onUpdate: NoAction, map: "cartags_ibfk_1")
+  tags  tags   @relation(fields: [TagID], references: [TagID], onDelete: NoAction, onUpdate: NoAction, map: "cartags_ibfk_2")
+
+  @@id([CarID, TagID])
+  @@index([TagID], map: "TagID")
+}
+
+model tags {
+  TagID   BigInt    @id @unique(map: "TagID") @default(autoincrement()) @db.UnsignedBigInt
+  Name    String    @unique(map: "Name") @db.VarChar(50)
+  cartags cartags[]
+}
+
+model testdriverequests {
+  requestId    BigInt                   @id @unique(map: "requestId") @default(autoincrement()) @db.UnsignedBigInt
+  buyerId      BigInt                   @db.UnsignedBigInt
+  carId        BigInt                   @db.UnsignedBigInt
+  status       testdriverequests_status @default(pending)
+  requestDate  DateTime?                @default(now()) @db.Timestamp(0)
+  responseDate DateTime?                @db.Timestamp(0)
+  users        users                    @relation(fields: [buyerId], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "testdriverequests_ibfk_1")
+  cars         cars                     @relation(fields: [carId], references: [CarID], onDelete: NoAction, onUpdate: NoAction, map: "testdriverequests_ibfk_2")
+
+  @@index([buyerId], map: "buyerId")
+  @@index([carId], map: "carId")
+}
+
+model users {
+  UserID                    BigInt              @id @unique(map: "UserID") @default(autoincrement()) @db.UnsignedBigInt
+  Email                     String              @unique(map: "Email") @db.VarChar(255)
+  PasswordHash              String              @db.Text
+  Name                      String?             @db.VarChar(100)
+  Role                      users_Role?         @default(BUYER)
+  CreatedAt                 DateTime?           @default(now()) @db.Timestamp(0)
+  cars_cars_SellerIDTousers cars[]              @relation("cars_SellerIDTousers")
+  cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
+  testdriverequests         testdriverequests[]
+}
+
+enum testdriverequests_status {
+  pending
+  processed
+}
+
+enum cars_ConditionID {
+  NEW
+  USED
+}
+
+enum users_Role {
+  ADMIN
+  SELLER
+  BUYER
+}
