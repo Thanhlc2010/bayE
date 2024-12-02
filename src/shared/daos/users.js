@@ -1,6 +1,6 @@
 //Database access using Prisma client (CRUD)
 
-import prisma from '../prisma/prismaClient.js'; // import prismaClient
+import prisma from '../../prisma/prismaClient.js'; // import prismaClient
 
 export const createUser = async (userData) => {
     try {

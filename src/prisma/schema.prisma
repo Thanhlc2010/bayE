@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model carmakes {
+  MakeID    Int         @id @default(autoincrement()) @db.UnsignedInt
+  Name      String      @unique(map: "Name") @db.VarChar(50)
+  carmodels carmodels[]
+  cars      cars[]
+}
+
+model carmodels {
+  ModelID  Int       @id @default(autoincrement()) @db.UnsignedInt
+  MakeID   Int?      @db.UnsignedInt
+  Name     String    @unique(map: "Name") @db.VarChar(50)
+  carmakes carmakes? @relation(fields: [MakeID], references: [MakeID], onDelete: Cascade, map: "carmodels_ibfk_1")
+  cars     cars[]
+
+  @@index([MakeID], map: "MakeID")
+}
+
+model favourites {
+  BuyerID   Int      @db.UnsignedInt
+  CarID     Int      @db.UnsignedInt
+  CreatedAt DateTime @default(now()) @db.Timestamp(0)
+  users     users    @relation(fields: [BuyerID], references: [UserID], onDelete: Cascade, map: "favourites_ibfk_1")
+  cars      cars     @relation(fields: [CarID], references: [CarID], onDelete: Cascade, map: "favourites_ibfk_2")
+
+  @@id([BuyerID, CarID])
+  @@index([BuyerID], map: "BuyerID")
+  @@index([CarID], map: "CarID")
+}
+
+model cars {
+  CarID                      Int                 @id @default(autoincrement()) @db.UnsignedInt
+  MakeID                     Int?                @db.UnsignedInt
+  ModelID                    Int?                @db.UnsignedInt
+  Gearbox                    String              @db.VarChar(20)
+  FuelType                   String              @db.VarChar(20)
+  Description                String              @db.Text
+  FactoryYear                Int                 @db.UnsignedInt
+  KilometersCount            Int                 @db.UnsignedInt
+  NumberOwners               Int                 @db.UnsignedInt
+  LicensePlate               String              @db.VarChar(11)
+  RegistrationStatus         registration_status
+  MadeIn                     country_made
+  EngineCapacity             Decimal             @db.Decimal(10, 1)
+  SeatNumber                 Int                 @db.UnsignedInt
+  DoorNumber                 Int                 @db.UnsignedInt
+  Weight                     Decimal             @db.Decimal(10, 2)
+  InstallmentLengthMin       Int                 @db.UnsignedInt
+  InstallmentLengthMax       Int                 @db.UnsignedInt
+  InterestRateMin            Int                 @db.UnsignedInt
+  InterestRateMax            Int                 @db.UnsignedInt
+  MonthlyInstallmentMin      Int                 @db.UnsignedInt
+  MonthlyInstallmentMax      Int                 @db.UnsignedInt
+  Title                      String              @db.Text
+  Status                     status              @default(selling)
+  Condition                  cars_ConditionID
+  Price                      Decimal             @db.Decimal(20, 2)
+  SellerID                   Int?                @db.UnsignedInt
+  BuyerID                    Int?                @db.UnsignedInt
+  CreatedAt                  DateTime            @default(now()) @db.Timestamp(0)
+  SoldAt                     DateTime?           @db.Timestamp(0)
+  images                     Json
+  carmakes                   carmakes?           @relation(fields: [MakeID], references: [MakeID], onDelete: Cascade, map: "cars_ibfk_1")
+  carmodels                  carmodels?          @relation(fields: [ModelID], references: [ModelID], onDelete: Cascade, map: "cars_ibfk_2")
+  users_cars_SellerIDTousers users?              @relation("cars_SellerIDTousers", fields: [SellerID], references: [UserID], onDelete: Cascade, map: "cars_ibfk_3")
+  users_cars_BuyerIDTousers  users?              @relation("cars_BuyerIDTousers", fields: [BuyerID], references: [UserID], onDelete: Cascade, map: "cars_ibfk_4")
+  cartags                    cartags[]
+  favourites                 favourites[]
+  testdriverequests          testdriverequests[]
+
+  @@index([BuyerID], map: "BuyerID")
+  @@index([MakeID], map: "MakeID")
+  @@index([ModelID], map: "ModelID")
+  @@index([SellerID], map: "SellerID")
+}
+
+model cartags {
+  CarID Int  @db.UnsignedInt
+  TagID Int  @db.UnsignedInt
+  cars  cars @relation(fields: [CarID], references: [CarID], onDelete: Cascade, map: "cartags_ibfk_1")
+  tags  tags @relation(fields: [TagID], references: [TagID], onDelete: Cascade, map: "cartags_ibfk_2")
+
+  @@id([CarID, TagID])
+  @@index([TagID], map: "TagID")
+}
+
+model tags {
+  TagID   Int       @id @default(autoincrement()) @db.UnsignedInt
+  Name    String    @unique(map: "Name") @db.VarChar(50)
+  cartags cartags[]
+}
+
+model testdriverequests {
+  requestId    Int                      @id @default(autoincrement()) @db.UnsignedInt
+  buyerId      Int                      @db.UnsignedInt
+  carId        Int                      @db.UnsignedInt
+  status       testdriverequests_status @default(pending)
+  requestDate  DateTime?                @default(now()) @db.Timestamp(0)
+  responseDate DateTime?                @db.Timestamp(0)
+  users        users                    @relation(fields: [buyerId], references: [UserID], onDelete: Cascade, map: "testdriverequests_ibfk_1")
+  cars         cars                     @relation(fields: [carId], references: [CarID], onDelete: Cascade, map: "testdriverequests_ibfk_2")
+
+  @@index([buyerId], map: "buyerId")
+  @@index([carId], map: "carId")
+}
+
+model users {
+  UserID                    Int                 @id @default(autoincrement()) @db.UnsignedInt
+  Email                     String              @unique(map: "Email") @db.VarChar(255)
+  PasswordHash              String              @db.Text
+  Name                      String?             @db.VarChar(100)
+  Role                      users_Role          @default(BUYER)
+  CreatedAt                 DateTime?           @default(now()) @db.Timestamp(0)
+  cars_cars_SellerIDTousers cars[]              @relation("cars_SellerIDTousers")
+  cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
+  favourites                favourites[]
+  testdriverequests         testdriverequests[]
+}
+
+enum status {
+  sold
+  selling
+}
+
+enum testdriverequests_status {
+  pending
+  processed
+}
+
+enum cars_ConditionID {
+  NEW
+  USED
+}
+
+enum users_Role {
+  ADMIN
+  SELLER
+  BUYER
+}
+
+enum registration_status {
+  remaining
+  expired
+}
+
+enum country_made {
+  Vietnam
+  India
+  SouthKorea
+  Thailand
+  Japan
+  China
+  USA
+  Germany
+  Taiwan
+}
