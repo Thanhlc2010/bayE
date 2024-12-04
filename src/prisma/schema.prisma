@@ -145,3 +145,20 @@ enum users_Role {
   SELLER
   BUYER
 }
+
+enum registration_status {
+  remaining
+  expired
+}
+
+enum country_made {
+  Vietnam
+  India
+  SouthKorea
+  Thailand
+  Japan
+  China
+  USA
+  Germany
+  Taiwan
+}

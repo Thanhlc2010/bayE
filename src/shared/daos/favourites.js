@@ -1,4 +1,4 @@
-import prisma from '../prisma/prismaClient.js'; // import prismaClient
+import prisma from '../../prisma/prismaClient.js'; // import prismaClient
 
 export const createFavour = async (favourData) => {
     try {
