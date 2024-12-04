@@ -7,6 +7,7 @@ import buyingRoutes from './buying/buyingRoutes.js';
 import sellingRoutes from './selling/sellingRoutes.js';
 import addFavour from './favourites/favouritesAddController.js';
 import delFavour from './favourites/favouriteDelController.js';
+import driveRequest from './buying/driveRequestController.js'
 import { bigIntMiddleware } from './shared/middleware/bigIntMiddleware.js';
 
 import dotenv from 'dotenv';
@@ -23,7 +24,7 @@ app.use('/api/account', accountRoutes);
 app.use('/api', buyingRoutes);
 app.use('/api/favour', addFavour);
 app.use('/api/favour', delFavour);
-
+app.use('/api/', driveRequest);
 app.use('/api/', sellingRoutes);
 
 

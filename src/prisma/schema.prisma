@@ -105,6 +105,11 @@ model testdriverequests {
   status       testdriverequests_status @default(pending)
   requestDate  DateTime?                @default(now()) @db.Timestamp(0)
   responseDate DateTime?                @db.Timestamp(0)
+  name         String?                  // Thêm tên
+  surname      String?                  // Thêm họ
+  email        String?                  // Thêm email
+  address      String?                  // Thêm địa chỉ
+
   users        users                    @relation(fields: [buyerId], references: [UserID], onDelete: Cascade, map: "testdriverequests_ibfk_1")
   cars         cars                     @relation(fields: [carId], references: [CarID], onDelete: Cascade, map: "testdriverequests_ibfk_2")
 
@@ -118,6 +123,7 @@ model users {
   PasswordHash              String              @db.Text
   Name                      String?             @db.VarChar(100)
   Role                      users_Role          @default(BUYER)
+  Phone                     String?             @db.VarChar(13)
   CreatedAt                 DateTime?           @default(now()) @db.Timestamp(0)
   cars_cars_SellerIDTousers cars[]              @relation("cars_SellerIDTousers")
   cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
