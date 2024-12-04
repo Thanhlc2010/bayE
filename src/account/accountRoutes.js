@@ -5,7 +5,7 @@ import { registerAccount } from './accountController.js';
 
 const router = express.Router();
 
-// Định nghĩa route cho việc đăng ký tài khoản mới
+// [POST] /api/users/register
 router.post('/register', registerAccount);
 
 export default router;

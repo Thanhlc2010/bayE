@@ -7,9 +7,11 @@ export const createUser = async (userData) => {
         const user = await prisma.users.create({
             data: {
                 Email: userData.email,
-                PasswordHash: userData.passwordHash,
-                Name: userData.name,
-                Role: userData.role,
+                PasswordHash: userData.password,
+                FirstName: userData.firstName,
+                LastName: userData.lastName,
+                AccountType: userData.accountType,
+                Phone: userData.phone,
             },
         });
         return user;
@@ -65,5 +67,14 @@ export const deleteUser = async (userId) => {
     }
 };
 
-
-
+// Check database connection status
+export const checkDatabaseConnection = async () => {
+    try {
+        await prisma.$connect();
+        console.log('Database connection successful');
+    } catch (error) {
+        console.error('Error connecting to the database: ' + error.message);
+    } finally {
+        await prisma.$disconnect();
+    }
+};

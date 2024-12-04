@@ -7,8 +7,8 @@ const app = express();
 app.use(express.json());
 app.use(bigIntMiddleware);
 
-// Gắn route account vào /api/account
-app.use('/api/account', accountRoutes);
+// Gắn route account vào /api/users
+app.use('/api/users', accountRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

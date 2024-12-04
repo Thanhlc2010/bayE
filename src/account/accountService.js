@@ -11,9 +11,11 @@ export const registerUser = async (userData) => {
         // Chuẩn bị dữ liệu user với password đã được hash
         const user = await createUser({
             email: userData.email,
-            passwordHash: hashedPassword,
-            name: userData.name || null,
-            role: userData.role || 'BUYER',  // Default role
+            easswordHash: hashedPassword,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            accountType: userData.accountType,
+            phone: userData.phone,
         });
 
         return user;

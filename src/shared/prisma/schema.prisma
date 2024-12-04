@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:rootpassword@13.238.116.65:3306/baye_db"
 }
 
 model carmakes {
