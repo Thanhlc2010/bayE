@@ -4,9 +4,15 @@ import {addCar as serviceAddCar} from './sellingService.js';
 export async function addCar(req, res){
     try {
         const carData = JSON.parse(req.body.carData);
-        const images = req.files;
- 
-        const newCarId = await serviceAddCar(carData, images);
+
+        const imageFiles = req.files['image'] || [];
+        const imagesFiles = req.files['images'] || [];
+
+        const files = [...imageFiles, ...imagesFiles].map((file) => file.path);
+
+        // console.log(JSON.stringify(images))
+        const newCarId = await serviceAddCar(carData, files);
+        
         //TODO: return a id of car
         res.status(201).json({ message: 'Car added successfully', car: newCarId})
         

@@ -18,6 +18,6 @@ const upload = multer({ storage: storage });
 
 // Export the middleware
 export const uploadMiddleware = upload.fields([
-  { name: 'image', maxCount: 10 }, // Accept 'image'
-  { name: 'images', maxCount: 10 }, // Accept 'images'
+  { name: 'image', maxCount: 20 }, // Accept 'image'
+  { name: 'images', maxCount: 20 }, // Accept 'images'
 ]);

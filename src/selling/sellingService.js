@@ -1,22 +1,19 @@
+import { uploadImages } from "../imagesUpload/cloudinaryImageUpload.js";
 import { createCar } from "../shared/daos/cars.js";
 import { imageToBase64 } from "../util/imageToB64.js";
 import Car from "./carParser.js";
-export const addCar = async (carData, images) => {
+export const addCar = async (carData, files) => {
 
     const flattenData = new Car(carData);
 
-    //TODO: base64 parser with images
-    const base64Images = await Promise.all(
-        images.map(async (imageFile) => {
-            const base64String = await imageToBase64(imageFile.path);
-            return base64String;
-            // const base64String = await compressImage(imageFile.path);
-            // return base64String
-        })
-    )
-    // console.log(flattenData)
-    flattenData.images = base64Images;
+    // Upload images to Cloudinary
+    const imageUrls = await uploadImages(files);
+    console.log({imageUrls})
+
+    flattenData.images = imageUrls;
+    
     const carId = await createCar(flattenData);
+    //TODO: Delete image from uploads folder
     return carId;
 };
 

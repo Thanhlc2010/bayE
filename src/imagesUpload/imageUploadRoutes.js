@@ -12,7 +12,7 @@ router.post("/cars/:id/images", uploadMiddleware, async (req, res) => {
         const imageFiles = req.files['image'] || [];
         const imagesFiles = req.files['images'] || [];
         const files = [...imageFiles, ...imagesFiles].map((file) => file.path);
-
+        // console.log({files})
         // Upload images to Cloudinary
         const imageUrls = await uploadImages(files);
         res.status(200).json({ message: 'Images uploaded successfully', imageUrls });
