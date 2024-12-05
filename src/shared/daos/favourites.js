@@ -58,6 +58,3 @@ export const deleteFavour = async (favourData) => {
         throw new Error('Error deleting favour: ' + error.message);
     }
 };
-
-
-// export default router;
