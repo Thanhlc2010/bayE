@@ -5,6 +5,7 @@ import 'dotenv/config';
 import accountRoutes from './account/accountRoutes.js';
 import buyingRoutes from './buying/buyingRoutes.js';
 import sellingRoutes from './selling/sellingRoutes.js';
+import imageRoutes from './imagesUpload/imageUploadRoutes.js';
 import addFavour from './favourites/favouritesAddController.js';
 import delFavour from './favourites/favouriteDelController.js';
 import { bigIntMiddleware } from './shared/middleware/bigIntMiddleware.js';
@@ -26,6 +27,7 @@ app.use('/api/favour', delFavour);
 
 app.use('/api/', sellingRoutes);
 
+app.use('/api', imageRoutes);
 
 // dataMake()
 const PORT = process.env.PORT || 8000;
