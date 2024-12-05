@@ -4,11 +4,11 @@ import { getCarsService, getCarService } from './buyingService.js'
 export const getCars = async (req, res) => {
     try {
         // Extract query parameters for filtering and sorting
-        const {CarID, Year, filter, sortBy = 'CarID', order = 'asc' } = req.query;
+        const { sortBy = 'CreatedAt', order = 'desc', ...filter } = req.query;
 
         // Call the service layer with filter and sorting options
         const cars = await getCarsService({
-            filter: filter ? JSON.parse(filter) : {}, // Parse the filter object if provided
+            filter: filter, // Parse the filter object if provided
             // filter: {Year : parseInt(Year), CarID : parseInt(CarID)}, // Another way to handle query params
             sortBy,
             order,
