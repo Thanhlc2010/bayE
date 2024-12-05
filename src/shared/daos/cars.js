@@ -98,7 +98,6 @@ export const createCar = async (carData) => {
                     : undefined,
                 // Optional image or related data handling if required
                 images: carData.images.map((imagePath) => (imagePath)),
-                
             },
         });
         console.log({carData})
@@ -111,3 +110,16 @@ export const createCar = async (carData) => {
     }
 };
 
+// Add images to existing car by CarID
+export const addCarImages = async (carId, imageUrls) => {
+    try {
+        const car = await prisma.cars.update({
+            where: { CarID: parseInt(carId) },
+            data: { images: imageUrls },
+        });
+        return car;
+    } catch (error) {
+        console.error('Error saving car images (daos):', error.message);
+        throw error;
+    }
+};

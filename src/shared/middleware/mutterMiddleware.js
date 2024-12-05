@@ -17,4 +17,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Export the middleware
-export const uploadMiddleware = upload.array('image', 10); // 'images' is the field name for multiple files, adjust the limit as needed
+export const uploadMiddleware = upload.fields([
+  { name: 'image', maxCount: 10 }, // Accept 'image'
+  { name: 'images', maxCount: 10 }, // Accept 'images'
+]);
