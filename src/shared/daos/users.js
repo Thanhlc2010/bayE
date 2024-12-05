@@ -8,10 +8,10 @@ export const createUser = async (userData) => {
             data: {
                 Email: userData.email,
                 PasswordHash: userData.password,
-                FirstName: userData.firstName,
-                LastName: userData.lastName,
-                AccountType: userData.accountType,
+                Name: userData.name,
+                Role: userData.role,
                 Phone: userData.phone,
+                CreatedAt: userData.createdAt,
             },
         });
         return user;

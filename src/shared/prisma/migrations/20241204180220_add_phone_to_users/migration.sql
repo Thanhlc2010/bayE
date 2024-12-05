@@ -1,28 +1,28 @@
 /*
   Warnings:
 
-  - You are about to drop the `car` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `testdriverequest` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `user` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `Car` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `TestDriveRequest` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
 
 */
 -- DropForeignKey
-ALTER TABLE `car` DROP FOREIGN KEY `Car_userId_fkey`;
+ALTER TABLE `Car` DROP FOREIGN KEY `Car_userId_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `testdriverequest` DROP FOREIGN KEY `TestDriveRequest_carId_fkey`;
+ALTER TABLE `TestDriveRequest` DROP FOREIGN KEY `TestDriveRequest_carId_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `testdriverequest` DROP FOREIGN KEY `TestDriveRequest_userId_fkey`;
+ALTER TABLE `TestDriveRequest` DROP FOREIGN KEY `TestDriveRequest_userId_fkey`;
 
 -- DropTable
-DROP TABLE `car`;
+DROP TABLE `Car`;
 
 -- DropTable
-DROP TABLE `testdriverequest`;
+DROP TABLE `TestDriveRequest`;
 
 -- DropTable
-DROP TABLE `user`;
+DROP TABLE `User`;
 
 -- CreateTable
 CREATE TABLE `carmakes` (
@@ -60,14 +60,34 @@ CREATE TABLE `cars` (
     `CarID` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
     `MakeID` INTEGER UNSIGNED NULL,
     `ModelID` INTEGER UNSIGNED NULL,
-    `Year` INTEGER NOT NULL,
+    `Gearbox` VARCHAR(20) NOT NULL,
+    `FuelType` VARCHAR(20) NOT NULL,
+    `Description` TEXT NOT NULL,
+    `FactoryYear` INTEGER UNSIGNED NOT NULL,
+    `KilometersCount` INTEGER UNSIGNED NOT NULL,
+    `NumberOwners` INTEGER UNSIGNED NOT NULL,
+    `LicensePlate` VARCHAR(11) NOT NULL,
+    `RegistrationStatus` ENUM('remaining', 'expired') NOT NULL,
+    `MadeIn` ENUM('Vietnam', 'India', 'SouthKorea', 'Thailand', 'Japan', 'China', 'USA', 'Germany', 'Taiwan') NOT NULL,
+    `EngineCapacity` DECIMAL(10, 1) NOT NULL,
+    `SeatNumber` INTEGER UNSIGNED NOT NULL,
+    `DoorNumber` INTEGER UNSIGNED NOT NULL,
+    `Weight` DECIMAL(10, 2) NOT NULL,
+    `InstallmentLengthMin` INTEGER UNSIGNED NOT NULL,
+    `InstallmentLengthMax` INTEGER UNSIGNED NOT NULL,
+    `InterestRateMin` INTEGER UNSIGNED NOT NULL,
+    `InterestRateMax` INTEGER UNSIGNED NOT NULL,
+    `MonthlyInstallmentMin` INTEGER UNSIGNED NOT NULL,
+    `MonthlyInstallmentMax` INTEGER UNSIGNED NOT NULL,
+    `Title` TEXT NOT NULL,
+    `Status` ENUM('sold', 'selling') NOT NULL DEFAULT 'selling',
     `Condition` ENUM('NEW', 'USED') NOT NULL,
-    `Price` DECIMAL(10, 2) NOT NULL,
-    `Status` VARCHAR(20) NULL,
+    `Price` DECIMAL(20, 2) NOT NULL,
     `SellerID` INTEGER UNSIGNED NULL,
     `BuyerID` INTEGER UNSIGNED NULL,
     `CreatedAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     `SoldAt` TIMESTAMP(0) NULL,
+    `images` JSON NOT NULL,
 
     INDEX `BuyerID`(`BuyerID`),
     INDEX `MakeID`(`MakeID`),
@@ -115,6 +135,7 @@ CREATE TABLE `users` (
     `PasswordHash` TEXT NOT NULL,
     `Name` VARCHAR(100) NULL,
     `Role` ENUM('ADMIN', 'SELLER', 'BUYER') NOT NULL DEFAULT 'BUYER',
+    `Phone` VARCHAR(13) NULL,
     `CreatedAt` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
 
     UNIQUE INDEX `Email`(`Email`),
