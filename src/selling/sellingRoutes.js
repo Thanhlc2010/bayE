@@ -6,5 +6,4 @@ const router = express.Router();
 // Route: POST /api/cars
 router.post('/cars', uploadMiddleware, addCar);
 
-
 export default router;
