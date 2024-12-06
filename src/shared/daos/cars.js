@@ -142,3 +142,31 @@ export const addCarImages = async (carId, imageUrls) => {
         throw error;
     }
 };
+
+// DAO function to search for cars by keyword
+export const searchCarsByKeywordDAO = async (keyword) => {
+    return await prisma.cars.findMany({
+        where: {
+            OR: [
+                {
+                    carmakes: {
+                        Name: {
+                            contains: keyword, // Match car make
+                        },
+                    },
+                },
+                {
+                    carmodels: {
+                        Name: {
+                            contains: keyword, // Match car model
+                        },
+                    },
+                },
+            ],
+        },
+        include: {
+            carmakes: true, // Include related car make details
+            carmodels: true, // Include related car model details
+        },
+    });
+};
