@@ -2,6 +2,9 @@
 
 import { registerUser, loginUser } from './accountService.js';
 import { checkDatabaseConnection } from '../shared/daos/users.js';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET; // Replace with your actual secret key
 
 export const registerAccount = async (req, res) => {
     try {
@@ -50,7 +53,15 @@ export const loginAccount = async (req, res) => {
 
         const user = await loginUser(email, password);
         console.log('User logged in successfully:', user);
-        res.status(200).json({ message: 'User logged in successfully', user });
+
+        // Generate access token
+        const accessToken = jwt.sign(
+            { id: user.id, email: user.email, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({ message: 'User logged in successfully', user, accessToken });
     } catch (error) {
         console.error('Error logging in:', error.message);
         res.status(500).json({ error: error.message });
