@@ -1,24 +1,43 @@
 import prisma from '../../prisma/prismaClient.js';
+import {MAX_PAGE_SIZE} from "../../util/constants.js";
+
 
 // DAO function to get all cars
-export const getAllCarsDAO = async ({ filter = {}, sortBy = 'CarID', order = 'asc' }) => {
+export const getAllCarsDAO = async ({ filter = {}, sortBy = 'CreatedAt', order = 'desc' }) => {
     try {
         // Prisma query to fetch cars with filtering and sorting
-        const cars = await prisma.cars.findMany({
+        // Page is 0-based index
+        const { Page, MakeName, ModelName, ...params} = filter;
+        const page = Page ? Page : 0;
+        const queryArgs = {
             where: {
-                ...filter, // Dynamic filtering
+                ...params, // Dynamic filtering
+                carmakes: {
+                    Name: {
+                        contains: MakeName,
+                    }
+                },
+                carmodels: {
+                    Name: {
+                        contains: ModelName
+                    }
+                }
             },
             orderBy: {
                 [sortBy]: order, // Dynamic sorting
             },
+            skip: page * MAX_PAGE_SIZE,
+            take: MAX_PAGE_SIZE,
             include: {
                 carmakes: true,  // Include related car make details
                 carmodels: true, // Include related car model details
                 users_cars_SellerIDTousers: true // Include related Seller information details
             },
-        });
-
-        return cars;
+        }
+        const totalCars = await prisma.cars.count({ where: queryArgs.where });
+        const totalPage = Math.ceil(totalCars / MAX_PAGE_SIZE);
+        const cars = await prisma.cars.findMany(queryArgs);
+        return { cars, currentPage : parseInt(page), pageSize : MAX_PAGE_SIZE, totalPage};
     } catch (error) {
         console.error('Error in carDAO.getAllCars:', error.message);
         throw error; // Pass the error back to the service layer
@@ -122,4 +141,32 @@ export const addCarImages = async (carId, imageUrls) => {
         console.error('Error saving car images (daos):', error.message);
         throw error;
     }
+};
+
+// DAO function to search for cars by keyword
+export const searchCarsByKeywordDAO = async (keyword) => {
+    return await prisma.cars.findMany({
+        where: {
+            OR: [
+                {
+                    carmakes: {
+                        Name: {
+                            contains: keyword, // Match car make
+                        },
+                    },
+                },
+                {
+                    carmodels: {
+                        Name: {
+                            contains: keyword, // Match car model
+                        },
+                    },
+                },
+            ],
+        },
+        include: {
+            carmakes: true, // Include related car make details
+            carmodels: true, // Include related car model details
+        },
+    });
 };

@@ -9,6 +9,7 @@ import imageRoutes from './imagesUpload/imageUploadRoutes.js';
 import addFavour from './favourites/favouritesAddController.js';
 import delFavour from './favourites/favouriteDelController.js';
 import driveRequest from './buying/driveRequestController.js'
+import searchByKeywordRoutes from "./searchByKeyword/searchByKeywordRoutes.js";
 import { bigIntMiddleware } from './shared/middleware/bigIntMiddleware.js';
 
 import dotenv from 'dotenv';
@@ -21,17 +22,16 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/api/account', accountRoutes);
+app.use('/api/users', accountRoutes);
 app.use('/api', buyingRoutes);
 app.use('/api/favour', addFavour);
 app.use('/api/favour', delFavour);
 app.use('/api/', driveRequest);
 app.use('/api/', sellingRoutes);
+app.use('/api', searchByKeywordRoutes);
 
 app.use('/api', imageRoutes);
 
-console.log(process.env.DATABASE_URL)
-// dataMake()
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
