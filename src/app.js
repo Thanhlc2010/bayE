@@ -22,7 +22,7 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/api/account', accountRoutes);
+app.use('/api/users', accountRoutes);
 app.use('/api', buyingRoutes);
 app.use('/api/favour', addFavour);
 app.use('/api/favour', delFavour);
@@ -32,8 +32,6 @@ app.use('/api', searchByKeywordRoutes);
 
 app.use('/api', imageRoutes);
 
-console.log(process.env.DATABASE_URL)
-// dataMake()
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
