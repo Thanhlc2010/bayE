@@ -49,10 +49,10 @@ model cars {
   LicensePlate               String              @db.VarChar(11)
   RegistrationStatus         registration_status
   MadeIn                     country_made
-  EngineCapacity             Decimal             @db.Decimal(10, 1)
+  EngineCapacity             String              @db.Text
   SeatNumber                 Int                 @db.UnsignedInt
   DoorNumber                 Int                 @db.UnsignedInt
-  Weight                     Decimal             @db.Decimal(10, 2)
+  Weight                     String               @db.Text
   InstallmentLengthMin       Int                 @db.UnsignedInt
   InstallmentLengthMax       Int                 @db.UnsignedInt
   InterestRateMin            Int                 @db.UnsignedInt
