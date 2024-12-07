@@ -7,7 +7,6 @@ export const addCar = async (carData, files) => {
 
     // Upload images to Cloudinary
     const imageUrls = await uploadImages(files);
-    console.log({imageUrls})
 
     flattenData.images = imageUrls;
     

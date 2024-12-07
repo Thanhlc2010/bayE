@@ -100,6 +100,11 @@ export const createCar = async (carData) => {
                 MonthlyInstallmentMax: carData.monthlyInstallmentEnd,
                 InterestRateMin: carData.interestRateStart,
                 InterestRateMax: carData.interestRateEnd,
+                users_cars_SellerIDTousers: {
+                    connect: {
+                        UserID: carData.sellerId,
+                    },
+                  },
                 // Include relationships if applicable (example below)
                 carmakes: carData.brand
                     ? {
@@ -119,7 +124,7 @@ export const createCar = async (carData) => {
                 images: carData.images.map((imagePath) => (imagePath)),
             },
         });
-        console.log({carData})
+
 
         // console.log("Car created successfully:", car.CarID);
         return car.CarID; // Return the created car record if needed

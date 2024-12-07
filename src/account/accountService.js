@@ -40,7 +40,7 @@ export const loginUser = async (email, password) => {
 
         // Return user data (excluding password hash)
         return {
-            id: user.id,
+            id: user.UserID,
             email: user.Email,
             name: user.Name,
             role: user.Role,

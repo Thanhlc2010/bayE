@@ -4,10 +4,11 @@ import {addCar as serviceAddCar} from './sellingService.js';
 export async function addCar(req, res){
     try {
         const carData = JSON.parse(req.body.carData);
-
+        const id = req.body.user_id;
         const imageFiles = req.files['image'] || [];
         const imagesFiles = req.files['images'] || [];
 
+        carData.sellerId = parseInt(id);
         const files = [...imageFiles, ...imagesFiles].map((file) => file.path);
 
         // console.log(JSON.stringify(images))
