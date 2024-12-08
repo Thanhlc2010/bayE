@@ -175,3 +175,11 @@ export const searchCarsByKeywordDAO = async (keyword) => {
         },
     });
 };
+
+export const getCarBySellerDAO = async (seller_id) => {
+    return await prisma.cars.findMany({
+        where: {
+            SellerID: Number(seller_id),
+        }
+    })
+}
