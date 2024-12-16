@@ -49,10 +49,10 @@ model cars {
   LicensePlate               String              @db.VarChar(11)
   RegistrationStatus         registration_status
   MadeIn                     country_made
-  EngineCapacity             Decimal             @db.Decimal(10, 1)
+  EngineCapacity             String              @db.Text
   SeatNumber                 Int                 @db.UnsignedInt
   DoorNumber                 Int                 @db.UnsignedInt
-  Weight                     Decimal             @db.Decimal(10, 2)
+  Weight                     String              @db.Text
   InstallmentLengthMin       Int                 @db.UnsignedInt
   InstallmentLengthMax       Int                 @db.UnsignedInt
   InterestRateMin            Int                 @db.UnsignedInt
@@ -117,13 +117,18 @@ model testdriverequests {
 }
 
 model users {
-  UserID                    Int                 @id @default(autoincrement()) @db.UnsignedInt
-  Email                     String              @unique(map: "Email") @db.VarChar(255)
-  PasswordHash              String              @db.Text
-  Name                      String?             @db.VarChar(100)
-  Role                      users_Role          @default(BUYER)
-  Phone                     String?             @db.VarChar(13)
-  CreatedAt                 DateTime?           @default(now()) @db.Timestamp(0)
+  UserID       Int        @id @default(autoincrement()) @db.UnsignedInt
+  Email        String     @unique(map: "Email") @db.VarChar(255)
+  PasswordHash String     @db.Text
+  Name         String?    @db.VarChar(100)
+  Role         users_Role @default(BUYER)
+  Phone        String?    @db.VarChar(13)
+  CreatedAt    DateTime?  @default(now()) @db.Timestamp(0)
+
+  dateOfBirth    DateTime @default(now()) @db.Timestamp(0)
+  ProfilePicture String?  @db.VarChar(255)
+  Address        String?  @db.VarChar(255)
+
   cars_cars_SellerIDTousers cars[]              @relation("cars_SellerIDTousers")
   cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
   favourites                favourites[]
