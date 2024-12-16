@@ -7,8 +7,17 @@ export const getAllCarsDAO = async ({ filter = {}, sortBy = 'CreatedAt', order =
     try {
         // Prisma query to fetch cars with filtering and sorting
         // Page is 0-based index
-        const { Page, MakeName, ModelName, ...params} = filter;
+        const { Page, MakeName, ModelName, min, max, ...params} = filter;
         const page = Page ? Page : 0;
+        console.log(`Received filter params: ${filter}`);
+        const priceFilter = {};
+        if (min) {
+            priceFilter.gte = parseFloat(min);
+        }
+        if (max) {
+            priceFilter.lte = parseFloat(max);
+        }
+
         const queryArgs = {
             where: {
                 ...params, // Dynamic filtering
@@ -17,6 +26,7 @@ export const getAllCarsDAO = async ({ filter = {}, sortBy = 'CreatedAt', order =
                         contains: MakeName,
                     }
                 },
+                Price: priceFilter,
                 carmodels: {
                     Name: {
                         contains: ModelName
