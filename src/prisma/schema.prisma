@@ -124,6 +124,9 @@ model users {
   Role                      users_Role          @default(BUYER)
   Phone                     String?             @db.VarChar(13)
   CreatedAt                 DateTime?           @default(now()) @db.Timestamp(0)
+  Address                   String?             @db.VarChar(255)
+  ProfilePicture            String?             @db.VarChar(255)
+  dateOfBirth               DateTime            @default(now()) @db.Timestamp(0)
   cars_cars_SellerIDTousers cars[]              @relation("cars_SellerIDTousers")
   cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
   favourites                favourites[]

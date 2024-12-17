@@ -1,7 +1,7 @@
 //Business Logic
 
 import bcrypt from 'bcrypt';
-import { createUser, findUserByEmail } from '../shared/daos/users.js';
+import { createUser, findUserByEmail, findUserById, updateUser, deleteUser } from '../shared/daos/users.js';
 
 export const registerUser = async (userData) => {
     try {
@@ -40,7 +40,7 @@ export const loginUser = async (email, password) => {
 
         // Return user data (excluding password hash)
         return {
-            id: user.id,
+            id: user.UserID,
             email: user.Email,
             name: user.Name,
             role: user.Role,
@@ -50,3 +50,124 @@ export const loginUser = async (email, password) => {
         throw new Error('Error logging in user: ' + error.message);
     }
 };
+
+export const getUserProfile = async (userId) => {
+    try {
+        // Find user by ID
+        const user = await findUserById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Return user data (excluding password hash)
+        return {
+            id: user.UserID,
+            email: user.Email,
+            name: user.Name,
+            role: user.Role,
+            phone: user.Phone,
+            // profilePicture: user.ProfilePicture || null,
+        };
+    } catch (error) {
+        throw new Error('Error getting user profile: ' + error.message);
+    }
+}
+
+export const updateUserProfile = async (userId, updateData) => {
+    try {
+        // Update user data
+        const updatedUser = await updateUser(userId, updateData);
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+
+        // Return user data (excluding password hash)
+        return {
+            id: updatedUser.UserID,
+            email: updatedUser.Email,
+            name: updatedUser.Name,
+            role: updatedUser.Role,
+            phone: updatedUser.Phone,
+            // profilePicture: updatedUser.ProfilePicture || null,
+        };
+    } catch (error) {
+        throw new Error('Error updating user profile: ' + error.message);
+    }
+}
+
+export const updatePassword = async (userId, oldPassword, newPassword) => {
+    try {
+        // Find user by ID
+        const user = await findUserById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Compare old password with hashed password
+        const isPasswordValid = await bcrypt.compare(oldPassword, user.PasswordHash);
+        if (!isPasswordValid) {
+            throw new Error('Invalid old password');
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update user password
+        const updatedUser = await updateUser(userId, { PasswordHash: hashedPassword });
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+
+        return {
+            id: updatedUser.UserID,
+            email: updatedUser.Email,
+            name: updatedUser.Name,
+            role: updatedUser.Role,
+            phone: updatedUser.Phone,
+            // profilePicture: updatedUser.ProfilePicture || null,
+        };
+    } catch (error) {
+        throw new Error('Error updating user password: ' + error.message);
+    }
+}
+
+// export const deleteUser = async (userId) => {
+//     try {
+//         // Delete user by ID
+//         const deletedUser = await prisma.users.delete({
+//             where: { UserID: BigInt(userId) },
+//         });
+
+//         return {
+//             id: deletedUser.UserID,
+//             email: deletedUser.Email,
+//             name: deletedUser.Name,
+//             role: deletedUser.Role,
+//             phone: deletedUser.Phone,
+//             profilePicture: deletedUser.ProfilePicture || null,
+//         };
+//     } catch (error) {
+//         throw new Error('Error deleting user: ' + error.message);
+//     }
+// }
+
+export const uploadProfilePicture = async (userId, file) => {
+    try {
+        // Update user profile picture
+        const updatedUser = await updateUser(userId, { ProfilePicture: file.path });
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+
+        return {
+            id: updatedUser.UserID,
+            email: updatedUser.Email,
+            name: updatedUser.Name,
+            role: updatedUser.Role,
+            phone: updatedUser.Phone,
+            // profilePicture: updatedUser.ProfilePicture || null,
+        };
+    } catch (error) {
+        throw new Error('Error uploading profile picture: ' + error.message);
+    }
+}
