@@ -1,6 +1,7 @@
 import express from 'express';
 import {uploadMiddleware} from "../shared/middleware/mutterMiddleware.js";
 import {addCarImages} from "../shared/daos/cars.js";
+import {updateUser} from "../shared/daos/users.js";
 import {uploadImages} from "./cloudinaryImageUpload.js";
 
 const router = express.Router();
@@ -25,7 +26,7 @@ router.post("/cars/:id/images", uploadMiddleware, async (req, res) => {
     }
 });
 
-router.post("users/:id/profilePicture", uploadMiddleware, async (req, res) => {
+router.post("/users/:id/profilePicture", uploadMiddleware, async (req, res) => {
     try {
         const {id} = req.params;
         const {path} = req.file;

@@ -4,7 +4,7 @@ import { registerUser, loginUser } from './accountService.js';
 import { checkDatabaseConnection } from '../shared/daos/users.js';
 import jwt from 'jsonwebtoken';
 import { updateUserProfile } from './accountService.js';
-import { uploadImages } from '../imagesUpload/cloudinaryImageUpload.js';
+import { uploadProfilePicture } from '../imagesUpload/cloudinaryImageUpload.js';
 
 const JWT_SECRET = process.env.JWT_SECRET; // Replace with your actual secret key
 
@@ -85,16 +85,21 @@ export const updateUser = async (req, res) => {
         console.log('Received request to update user profile:', req.body);
         await checkDatabaseConnection();
         const { id } = req.params;
-        const { email, password, name, role, phone, address } = req.body;
-        let profilePictureUrl;
+        const { email, name, address } = req.body;
+        console.log('Received request to update user profile:', email, name, address);
+        let profilePicture;
 
-        if (req.file) {
+        const img = req.files['image'][0];
+        console.log(req.files['image']);
+
+        if (req.files['image']) {
             // Upload profile picture to Cloudinary
-            const result = await uploadImages(req.file.path);
-            profilePictureUrl = result;
+            const result = await uploadProfilePicture(img.path);
+            console.log('Profile picture uploaded successfully:', result);
+            profilePicture = result;
         }
 
-        const user = await updateUserProfile(id, { email, password, name, role, phone, address, profilePictureUrl });
+        const user = await updateUserProfile(id, { email, name, address, profilePicture });
         console.log('User updated successfully:', user);
         res.status(200).json({ message: 'User updated successfully', user });
     } catch (error) {

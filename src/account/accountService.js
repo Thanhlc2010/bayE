@@ -2,6 +2,7 @@
 
 import bcrypt from 'bcrypt';
 import { createUser, findUserByEmail, findUserById, updateUser, deleteUser } from '../shared/daos/users.js';
+import { uploadProfilePicture } from '../imagesUpload/cloudinaryImageUpload.js';
 
 export const registerUser = async (userData) => {
     try {
@@ -45,6 +46,8 @@ export const loginUser = async (email, password) => {
             name: user.Name,
             role: user.Role,
             phone: user.Phone,
+            address: user.Address || null,
+            profilePicture: user.ProfilePicture || null,
         };
     } catch (error) {
         throw new Error('Error logging in user: ' + error.message);
@@ -66,7 +69,8 @@ export const getUserProfile = async (userId) => {
             name: user.Name,
             role: user.Role,
             phone: user.Phone,
-            // profilePicture: user.ProfilePicture || null,
+            address: user.Address,
+            profilePicture: user.ProfilePicture || null,
         };
     } catch (error) {
         throw new Error('Error getting user profile: ' + error.message);
@@ -74,7 +78,7 @@ export const getUserProfile = async (userId) => {
 }
 
 export const updateUserProfile = async (userId, updateData) => {
-    try {
+    try {        
         // Update user data
         const updatedUser = await updateUser(userId, updateData);
         if (!updatedUser) {
@@ -88,7 +92,7 @@ export const updateUserProfile = async (userId, updateData) => {
             name: updatedUser.Name,
             role: updatedUser.Role,
             phone: updatedUser.Phone,
-            // profilePicture: updatedUser.ProfilePicture || null,
+            profilePicture: updatedUser.ProfilePicture || null,
         };
     } catch (error) {
         throw new Error('Error updating user profile: ' + error.message);
@@ -151,23 +155,23 @@ export const updatePassword = async (userId, oldPassword, newPassword) => {
 //     }
 // }
 
-export const uploadProfilePicture = async (userId, file) => {
-    try {
-        // Update user profile picture
-        const updatedUser = await updateUser(userId, { ProfilePicture: file.path });
-        if (!updatedUser) {
-            throw new Error('User not found');
-        }
+// export const uploadProfilePicture = async (userId, file) => {
+//     try {
+//         // Update user profile picture
+//         const updatedUser = await updateUser(userId, { ProfilePicture: file.path });
+//         if (!updatedUser) {
+//             throw new Error('User not found');
+//         }
 
-        return {
-            id: updatedUser.UserID,
-            email: updatedUser.Email,
-            name: updatedUser.Name,
-            role: updatedUser.Role,
-            phone: updatedUser.Phone,
-            // profilePicture: updatedUser.ProfilePicture || null,
-        };
-    } catch (error) {
-        throw new Error('Error uploading profile picture: ' + error.message);
-    }
-}
+//         return {
+//             id: updatedUser.UserID,
+//             email: updatedUser.Email,
+//             name: updatedUser.Name,
+//             role: updatedUser.Role,
+//             phone: updatedUser.Phone,
+//             // profilePicture: updatedUser.ProfilePicture || null,
+//         };
+//     } catch (error) {
+//         throw new Error('Error uploading profile picture: ' + error.message);
+//     }
+// }
