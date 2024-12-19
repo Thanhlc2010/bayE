@@ -6,6 +6,7 @@ import accountRoutes from './account/accountRoutes.js';
 import buyingRoutes from './buying/buyingRoutes.js';
 import sellingRoutes from './selling/sellingRoutes.js';
 import imageRoutes from './imagesUpload/imageUploadRoutes.js';
+import auctionRoute from './auction/auctionRoutes.js'
 import addFavour from './favourites/favouritesAddController.js';
 import delFavour from './favourites/favouriteDelController.js';
 import driveRequest from './buying/driveRequestController.js'
@@ -32,10 +33,19 @@ app.use('/api/seller', sellingRoutes);
 app.use('/api', searchByKeywordRoutes);
 
 app.use('/api', imageRoutes);
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "src/dist", "index.html"));
-});
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+
+app.use('/api/', auctionRoute)
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "src/dist", "index.html"));
+// });
+app.get('/', (req, res) => {
+    res.send("Hello world")
+})
+
+// const PORT = process.env.PORT || 8000;
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+// });
+
+console.log("read through app file")
+export default app;
