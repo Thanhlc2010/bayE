@@ -100,16 +100,21 @@ export const createCar = async (carData) => {
                 // Brand: carData.brand,
                 // CarLine: carData.carLine,
                 FactoryYear: parseInt(carData.factoryYear),
-                EngineCapacity: parseFloat(carData.engineCapacity),
+                EngineCapacity: carData.engineCapacity,
                 SeatNumber: carData.seatNumber,
                 DoorNumber: carData.numberOfDoors,
-                Weight: parseFloat(carData.weight),
+                Weight: carData.weight,
                 InstallmentLengthMin: carData.installmentLengthStart,
                 InstallmentLengthMax: carData.installmentLengthEnd,
                 MonthlyInstallmentMin: carData.monthlyInstallmentStart,
                 MonthlyInstallmentMax: carData.monthlyInstallmentEnd,
                 InterestRateMin: carData.interestRateStart,
                 InterestRateMax: carData.interestRateEnd,
+                users_cars_SellerIDTousers: {
+                    connect: {
+                        UserID: carData.sellerId,
+                    },
+                  },
                 // Include relationships if applicable (example below)
                 carmakes: carData.brand
                     ? {
@@ -129,7 +134,7 @@ export const createCar = async (carData) => {
                 images: carData.images.map((imagePath) => (imagePath)),
             },
         });
-        console.log({carData})
+
 
         // console.log("Car created successfully:", car.CarID);
         return car.CarID; // Return the created car record if needed
@@ -180,3 +185,11 @@ export const searchCarsByKeywordDAO = async (keyword) => {
         },
     });
 };
+
+export const getCarBySellerDAO = async (seller_id) => {
+    return await prisma.cars.findMany({
+        where: {
+            SellerID: Number(seller_id),
+        }
+    })
+}

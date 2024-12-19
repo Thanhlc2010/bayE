@@ -52,7 +52,7 @@ model cars {
   EngineCapacity             String              @db.Text
   SeatNumber                 Int                 @db.UnsignedInt
   DoorNumber                 Int                 @db.UnsignedInt
-  Weight                     String              @db.Text
+  Weight                     String               @db.Text
   InstallmentLengthMin       Int                 @db.UnsignedInt
   InstallmentLengthMax       Int                 @db.UnsignedInt
   InterestRateMin            Int                 @db.UnsignedInt
