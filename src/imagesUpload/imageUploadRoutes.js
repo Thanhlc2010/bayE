@@ -25,4 +25,21 @@ router.post("/cars/:id/images", uploadMiddleware, async (req, res) => {
     }
 });
 
+router.post("users/:id/profilePicture", uploadMiddleware, async (req, res) => {
+    try {
+        const {id} = req.params;
+        const {path} = req.file;
+
+        // Upload image to Cloudinary
+        const imageUrl = await uploadImages(path);
+        res.status(200).json({ message: 'Image uploaded successfully', imageUrl });
+
+        // Save image URL to the database
+        await updateUser(id, { ProfilePicture: imageUrl });
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        res.status(500).json({ error: 'Failed to upload image' });
+    }
+});
+
 export default router;

@@ -8,6 +8,7 @@ import sellingRoutes from './selling/sellingRoutes.js';
 import imageRoutes from './imagesUpload/imageUploadRoutes.js';
 import addFavour from './favourites/favouritesAddController.js';
 import delFavour from './favourites/favouriteDelController.js';
+import getCarsFavour from './favourites/getCarFavourController.js';
 import driveRequest from './buying/driveRequestController.js'
 import searchByKeywordRoutes from "./searchByKeyword/searchByKeywordRoutes.js";
 import { bigIntMiddleware } from './shared/middleware/bigIntMiddleware.js';
@@ -28,7 +29,8 @@ app.use('/api', buyingRoutes);
 app.use('/api/favour', addFavour);
 app.use('/api/favour', delFavour);
 app.use('/api/', driveRequest);
-app.use('/api/seller', sellingRoutes);
+app.use('/api/', sellingRoutes);
+app.use('/api/', getCarsFavour);
 app.use('/api', searchByKeywordRoutes);
 
 app.use('/api', imageRoutes);
