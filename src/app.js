@@ -9,6 +9,7 @@ import imageRoutes from './imagesUpload/imageUploadRoutes.js';
 import auctionRoute from './auction/auctionRoutes.js'
 import addFavour from './favourites/favouritesAddController.js';
 import delFavour from './favourites/favouriteDelController.js';
+import getCarsFavour from './favourites/getCarFavourController.js';
 import driveRequest from './buying/driveRequestController.js'
 import searchByKeywordRoutes from "./searchByKeyword/searchByKeywordRoutes.js";
 import { bigIntMiddleware } from './shared/middleware/bigIntMiddleware.js';
@@ -29,7 +30,8 @@ app.use('/api', buyingRoutes);
 app.use('/api/favour', addFavour);
 app.use('/api/favour', delFavour);
 app.use('/api/', driveRequest);
-app.use('/api/seller', sellingRoutes);
+app.use('/api/', sellingRoutes);
+app.use('/api/', getCarsFavour);
 app.use('/api', searchByKeywordRoutes);
 
 app.use('/api', imageRoutes);
@@ -38,7 +40,8 @@ app.use('/api/', auctionRoute)
 // app.get("*", (req, res) => {
 //     res.sendFile(path.join(__dirname, "src/dist", "index.html"));
 // });
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
+    console.log('test')
     res.send("Hello world")
 })
 
@@ -47,5 +50,4 @@ app.get('/', (req, res) => {
 //     console.log(`Server running on port ${PORT}`);
 // });
 
-console.log("read through app file")
 export default app;

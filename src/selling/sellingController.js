@@ -6,7 +6,7 @@ export async function getCarBySeller(req, res) {
         const {id} = req.params;
         console.log(id)
         const sellerCars = await serviceSellerCar(id);
-
+        console.log(typeof sellerCars)
         res.status(200).json({message: sellerCars, length: sellerCars.length})
     } catch (err) {
         console.log(err)

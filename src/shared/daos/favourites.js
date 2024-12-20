@@ -58,3 +58,78 @@ export const deleteFavour = async (favourData) => {
         throw new Error('Error deleting favour: ' + error.message);
     }
 };
+
+export const getCarsFavour = async (BuyerID) => {
+    try {
+        // Kiểm tra nếu BuyerID không hợp lệ
+        if (!BuyerID) {
+            throw new Error('Buyer ID is required');
+        }
+
+        // Truy vấn danh sách xe yêu thích với các thông tin title, price, và images từ bảng cars
+        const favouriteCars = await prisma.favourites.findMany({
+            where: { BuyerID: parseInt(BuyerID, 10) },
+            include: {
+                cars: { // Truy vấn quan hệ `cars`
+                    select: {
+                        CarID: true,
+                        Title: true,
+                        Price: true,
+                        images: true,
+                        FuelType: true,
+                        Condition:true,
+                        DoorNumber: true,
+                        EngineCapacity: true,
+                        KilometersCount: true,
+                        FactoryYear: true,
+                        MadeIn: true,
+                        Gearbox: true,
+                        SeatNumber: true,
+                        RegistrationStatus: true,
+                        NumberOwners: true,
+                        Weight: true,
+                    },
+                },
+            },
+        });
+
+        // Kiểm tra nếu không có bản ghi nào
+        if (favouriteCars.length === 0) {
+            return {
+                success: true,
+                message: 'No favourite cars found for the given user.',
+                cars: [],
+            };
+        }
+
+        // Map kết quả để lấy thông tin title, price, và images
+        const cars = favouriteCars.map((fav) => ({
+            CarID: fav.cars.CarID,
+            title: fav.cars.Title,
+            price: fav.cars.Price,
+            images: fav.cars.images,
+            Fuel: fav.cars.FuelType,
+            Condition: fav.cars.Condition,
+            EngineCapacity: fav.cars.EngineCapacity,
+            DoorNumber: fav.cars.DoorNumber,
+            mileage: fav.cars.KilometersCount,
+            FactoryYear: fav.cars.FactoryYear,
+            MadeIn : fav.cars.MadeIn,
+            Gearbox: fav.cars.Gearbox,
+            SeatNumber: fav.cars.SeatNumber,
+            RegistrationStatus : fav.cars.RegistrationStatus,
+            NumberOwners: fav.cars.NumberOwners,
+            Weight: fav.cars.Weight,
+        }));
+
+        // Trả về danh sách xe
+        return {
+            success: true,
+            cars,
+        };
+    } catch (error) {
+        console.error('Error fetching favourites:', error.message);
+        throw new Error('Internal Server Error: ' + error.message);
+    }
+};
+

@@ -31,6 +31,18 @@ export const findUserByEmail = async (email) => {
     }
 };
 
+// Tìm user theo email
+export const findUserByPhone = async (phone) => {
+    try {
+        return await prisma.users.findUnique({
+            where: { Phone: phone },
+        });
+    } catch (error) {
+        throw new Error('Error finding user by phone: ' + error.message);
+    }
+};
+
+
 // Tìm user theo UserID
 export const findUserById = async (userId) => {
     try {
