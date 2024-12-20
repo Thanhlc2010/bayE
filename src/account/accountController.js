@@ -119,3 +119,41 @@ export const updateUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+export const getProfilePicture = async (req, res) => {
+    try {
+        console.log('Received request to get profile picture');
+        const { id } = req.params; // Get user ID from the param
+
+        const userId = parseInt(id, 10);
+
+        const user = await getUserProfile(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({ profilePicture: user.profilePicture });
+    } catch (error) {
+        console.error('Error getting profile picture:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const getUserBidding = async (req, res) => {
+    try {
+        console.log('Received request to get user profile - bidding');
+        const { id } = req.params; // Get user ID from the token
+
+        const userId = parseInt(id, 10);
+
+        const user = await getUserProfile(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({ profilePicture: user.profilePicture, name: user.name, userId: userId });
+    } catch (error) {
+        console.error('Error getting user profile:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+};

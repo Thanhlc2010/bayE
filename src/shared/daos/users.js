@@ -67,6 +67,17 @@ export const updateUser = async (userId, updateData) => {
     }
 };
 
+export const getProfilePicture = async (userId) => {
+    try {
+        return await prisma.users.findUnique({
+            where: { UserID: userId },
+            select: { ProfilePicture: true },
+        });
+    } catch (error) {
+        throw new Error('Error getting profile picture: ' + error.message);
+    }
+};
+
 // Xóa user
 export const deleteUser = async (userId) => {
     try {

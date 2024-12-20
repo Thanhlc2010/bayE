@@ -70,7 +70,7 @@ export const getUserProfile = async (userId) => {
             role: user.Role,
             phone: user.Phone,
             address: user.Address,
-            profilePicture: user.ProfilePicture || null,
+            profilePicture: user.ProfilePicture || 'https://res.cloudinary.com/dhgwdfhcf/image/upload/v1734632425/profilePictures/wvk5hiy5xtwydttzqxa3.jpg',
         };
     } catch (error) {
         throw new Error('Error getting user profile: ' + error.message);
