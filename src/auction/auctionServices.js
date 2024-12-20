@@ -23,15 +23,17 @@ export const createAuctionService = async (auctionData) => {
 };
 
 // Service function to get auction details
-export const getAuctionService = async (auctionID) => {
-    const auction = await getAuctionDAO(auctionID);
+export const getAuctionService = async () => {
+    const auctions = await getAuctionDAO();
 
-    if (!auction) {
-        throw new Error('Auction not found');
+    if (!auctions || auctions.length === 0) {
+        throw new Error('No auctions found');
     }
 
-    // Format response (optional)
-    return {
+    console.log('Fetched auctions:', auctions);
+
+    // Định dạng lại danh sách đấu giá
+    return auctions.map((auction) => ({
         AuctionID: auction.AuctionID,
         Title: auction.Title,
         Car: auction.cars,
@@ -39,10 +41,10 @@ export const getAuctionService = async (auctionID) => {
         EndTime: auction.EndTime,
         InitialPrice: auction.InitialPrice,
         Status: auction.Status,
-        Duration: auction.Duration, // Include the Duration field
+        Duration: auction.Duration,
         Participants: auction.usersAuction.map((ua) => ({
             UserID: ua.UserID,
             Name: ua.users.Name,
         })),
-    };
+    }));
 };

@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Route to create an auction
 router.post('/auctions', createAuction);
-router.get('/auctions/:id', getAuction);
+router.get('/getAuctions', getAuction);
 
 
 export default router;

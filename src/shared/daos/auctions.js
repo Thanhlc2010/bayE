@@ -7,18 +7,21 @@ export const createAuctionDAO = async (auctionData) => {
     });
 };
 
-export const getAuctionDAO = async (auctionID) => {
-    return prisma.auctions.findUnique({
+export const getAuctionDAO = async () => {
+    return prisma.auctions.findMany({
         where: {
-            AuctionID: auctionID,
+            Status: {
+                in: ['NOT_STARTED', 'OPEN'], // Lọc trạng thái là NOT_STARTED hoặc OPEN
+            },
         },
         include: {
-            cars: true, // Include car details
+            cars: true, // Bao gồm chi tiết xe
             usersAuction: {
                 include: {
-                    users: true, // Include participant details
+                    users: true, // Bao gồm chi tiết người tham gia
                 },
             },
         },
     });
 };
+

@@ -44,17 +44,12 @@ export const createAuction = async (req, res) => {
 // Controller function to get auction details
 export const getAuction = async (req, res) => {
     try {
-        const { id } = req.params; // Auction ID from URL
-
-        if (!id) {
-            return res.status(400).json({ error: 'Auction ID is required' });
-        }
-
-        const auction = await getAuctionService(parseInt(id, 10));
+        // Gọi service để lấy danh sách các phiên đấu giá
+        const auction = await getAuctionService();
 
         res.status(200).json({ message: 'Auction fetched successfully', data: auction });
     } catch (error) {
         console.error('Error in getAuction:', error.message);
-        res.status(404).json({ error: error.message });
+        // res.status(500).json({ error: 'Failed to fetch auctions' });
     }
 };
