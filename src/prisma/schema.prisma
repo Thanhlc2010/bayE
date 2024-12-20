@@ -75,6 +75,7 @@ model cars {
   cartags                    cartags[]
   favourites                 favourites[]
   testdriverequests          testdriverequests[]
+  auctions                   auctions[]
 
   @@index([BuyerID], map: "BuyerID")
   @@index([MakeID], map: "MakeID")
@@ -133,6 +134,42 @@ model users {
   cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
   favourites                favourites[]
   testdriverequests         testdriverequests[]
+  usersAuction              usersAuction[]
+}
+
+model auctions {
+  AuctionID    Int            @id @default(autoincrement()) @db.UnsignedInt
+  Title        String         @db.VarChar(255)
+  CarID        Int            @db.UnsignedInt
+  StartTime    DateTime       @db.Timestamp(0)
+  Duration     Int            @db.UnsignedInt
+  EndTime      DateTime       @db.Timestamp(0)
+  InitialPrice Decimal?       @db.Decimal(20, 2)
+  Status       auction_status @default(NOT_STARTED)
+  TopUser      Int?           @db.UnsignedInt
+
+  cars         cars           @relation(fields: [CarID], references: [CarID], onDelete: Cascade)
+  usersAuction usersAuction[]
+
+  @@index([CarID], map: "CarID")
+}
+
+model usersAuction {
+  AuctionID Int      @db.UnsignedInt
+  UserID    Int      @db.UnsignedInt
+  CreatedAt DateTime @default(now()) @db.Timestamp(0)
+
+  auctions auctions @relation(fields: [AuctionID], references: [AuctionID], onDelete: Cascade)
+  users    users    @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+
+  @@id([AuctionID, UserID])
+  @@index([UserID], map: "UserID")
+}
+
+enum auction_status {
+  NOT_STARTED
+  OPEN
+  CLOSED
 }
 
 enum status {
