@@ -25,3 +25,13 @@ export const getAuctionDAO = async () => {
     });
 };
 
+
+// DAO function to add a buyer to an auction
+export const addBuyerToAuctionDAO = async (auctionID, userID) => {
+    return prisma.usersAuction.create({
+        data: {
+            AuctionID: auctionID,
+            UserID: userID,
+        },
+    });
+};

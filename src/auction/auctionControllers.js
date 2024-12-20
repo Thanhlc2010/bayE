@@ -1,4 +1,4 @@
-import {createAuctionService, getAuctionService} from './auctionServices.js';
+import {createAuctionService, getAuctionService, participateInAuctionService} from './auctionServices.js';
 import prisma from '../prisma/prismaClient.js';
 
 // Controller function to create an auction
@@ -51,5 +51,27 @@ export const getAuction = async (req, res) => {
     } catch (error) {
         console.error('Error in getAuction:', error.message);
         // res.status(500).json({ error: 'Failed to fetch auctions' });
+    }
+};
+
+export const participateInAuction = async (req, res) => {
+    try {
+        const { id } = req.params; // AuctionID from the URL
+        const { userID } = req.body; // UserID from the request body
+
+        if (!id || !userID) {
+            return res.status(400).json({ error: 'Auction ID and UserID are required' });
+        }
+
+        // Call the service to handle participation
+        const participation = await participateInAuctionService(parseInt(id, 10), parseInt(userID, 10));
+
+        res.status(200).json({
+            message: 'Successfully joined the auction',
+            data: participation,
+        });
+    } catch (error) {
+        console.error('Error in participateInAuction:', error.message);
+        res.status(400).json({ error: error.message });
     }
 };
