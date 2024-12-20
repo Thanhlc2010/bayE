@@ -6,7 +6,7 @@ import accountRoutes from './account/accountRoutes.js';
 import buyingRoutes from './buying/buyingRoutes.js';
 import sellingRoutes from './selling/sellingRoutes.js';
 import imageRoutes from './imagesUpload/imageUploadRoutes.js';
-import auctionRoute from './auction/auctionRoutes.js'
+import auctionRoute from './leaderBoard/leaderboardRoutes.js'
 import addFavour from './favourites/favouritesAddController.js';
 import delFavour from './favourites/favouriteDelController.js';
 import getCarsFavour from './favourites/getCarFavourController.js';
@@ -37,9 +37,9 @@ app.use('/api', searchByKeywordRoutes);
 app.use('/api', imageRoutes);
 
 app.use('/api/', auctionRoute)
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "src/dist", "index.html"));
-// });
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/dist", "index.html"));
+});
 app.get('/api', (req, res) => {
     console.log('test')
     res.send("Hello world")

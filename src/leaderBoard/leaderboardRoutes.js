@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { getLeaderBoard, updateLeaderBoard } from './auctionController.js';
+import { getLeaderBoard, updateLeaderBoard } from './leaderboardController.js';
 
 const router = express.Router();
 
