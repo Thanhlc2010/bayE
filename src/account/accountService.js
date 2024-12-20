@@ -77,10 +77,10 @@ export const getUserProfile = async (userId) => {
     }
 }
 
-export const updateUserProfile = async (userId, updateData) => {
+export const updateUserProfile = async (UserID, updateData) => {
     try {        
         // Update user data
-        const updatedUser = await updateUser(userId, updateData);
+        const updatedUser = await updateUser(UserID, updateData);
         if (!updatedUser) {
             throw new Error('User not found');
         }

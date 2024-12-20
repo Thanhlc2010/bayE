@@ -47,7 +47,7 @@ export const findUserByPhone = async (phone) => {
 export const findUserById = async (userId) => {
     try {
         return await prisma.users.findUnique({
-            where: { UserID: BigInt(userId) },
+            where: { UserID: userId },
         });
     } catch (error) {
         throw new Error('Error finding user by ID: ' + error.message);
@@ -58,7 +58,7 @@ export const findUserById = async (userId) => {
 export const updateUser = async (userId, updateData) => {
     try {
         const updatedUser = await prisma.users.update({
-            where: { UserID: BigInt(userId) },
+            where: { UserID: userId },
             data: updateData,
         });
         return updatedUser;
