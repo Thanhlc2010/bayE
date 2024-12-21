@@ -187,9 +187,14 @@ export const searchCarsByKeywordDAO = async (keyword) => {
 };
 
 export const getCarBySellerDAO = async (seller_id) => {
+    console.log({seller_id})
     return await prisma.cars.findMany({
         where: {
             SellerID: Number(seller_id),
-        }
+        },
+        include: {
+            carmakes: true, // Include related car make details
+            carmodels: true, // Include related car model details
+        },  
     })
 }
