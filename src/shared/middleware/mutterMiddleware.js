@@ -20,4 +20,5 @@ const upload = multer({ storage: storage });
 export const uploadMiddleware = upload.fields([
   { name: 'image', maxCount: 20 }, // Accept 'image'
   { name: 'images', maxCount: 20 }, // Accept 'images'
+  { name: 'profilePicture', maxCount: 1 }, // Accept 'profilePicture'
 ]);

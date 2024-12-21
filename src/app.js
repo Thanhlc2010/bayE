@@ -5,6 +5,7 @@ import 'dotenv/config';
 import path from 'path'
 
 import accountRoutes from './account/accountRoutes.js';
+import adminRoutes from './admin/adminRoutes.js';
 import buyingRoutes from './buying/buyingRoutes.js';
 import sellingRoutes from './selling/sellingRoutes.js';
 import imageRoutes from './imagesUpload/imageUploadRoutes.js';
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'src/dist')));
 
 app.use('/api/users', accountRoutes);
+app.use('/api/admin', adminRoutes)
 app.use('/api', buyingRoutes);
 app.use('/api/favour', addFavour);
 app.use('/api/favour', delFavour);

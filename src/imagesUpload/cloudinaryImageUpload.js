@@ -12,3 +12,24 @@ export const uploadImages = async (filePaths) => {
         throw error;
     }
 };
+
+export const deleteImage = async (imageId) => {
+    try {
+        const result = await cloudinary.uploader.destroy(imageId);
+        return result;
+    } catch (error) {
+        console.error('Error deleting image from Cloudinary:', error);
+        throw error;
+    }
+};  
+
+export const uploadProfilePicture = async (filePath) => {
+    try {
+        console.log(filePath);
+        const result = await cloudinary.uploader.upload(filePath, { folder: 'profilePictures' });
+        return result.secure_url;
+    } catch (error) {
+        console.error('Error uploading profile picture to Cloudinary:', error);
+        throw error;
+    }
+}
