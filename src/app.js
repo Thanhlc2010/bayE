@@ -16,6 +16,7 @@ import chekFavour from './favourites/checkFavouritesController.js'
 import driveRequest from './buying/driveRequestController.js'
 import searchByKeywordRoutes from "./searchByKeyword/searchByKeywordRoutes.js";
 import auctionRoutes from './auction/auctionRoutes.js';
+import userBalanceRoutes from './balance/balanceRoutes.js';
 
 import { bigIntMiddleware } from './shared/middleware/bigIntMiddleware.js';
 
@@ -42,6 +43,7 @@ app.use('/api/', sellingRoutes);
 app.use('/api/', getCarsFavour);
 app.use('/api', searchByKeywordRoutes);
 app.use('/api', auctionRoutes);
+app.use('/api/users', userBalanceRoutes);
 
 app.use('/api', imageRoutes);
 

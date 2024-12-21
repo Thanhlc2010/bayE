@@ -124,6 +124,7 @@ model users {
   Name         String?    @db.VarChar(100)
   Role         users_Role @default(BUYER)
   Phone        String?    @db.VarChar(13)
+  Balance      Decimal    @default(0.00) @db.Decimal(20, 2)
   CreatedAt    DateTime?  @default(now()) @db.Timestamp(0)
 
   dateOfBirth    DateTime @default(now()) @db.Timestamp(0)
