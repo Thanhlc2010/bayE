@@ -35,3 +35,19 @@ export const addBuyerToAuctionDAO = async (auctionID, userID) => {
         },
     });
 };
+
+export const getAuctionByIdDAO = async (auctionID) => {
+    return prisma.auctions.findUnique({
+        where: {
+            AuctionID: auctionID,
+        },
+        include: {
+            cars: true, // Include car details
+            usersAuction: {
+                include: {
+                    users: true, // Include participant details
+                },
+            },
+        },
+    });
+};
