@@ -90,3 +90,18 @@ export const checkDatabaseConnection = async () => {
         await prisma.$disconnect();
     }
 };
+
+
+export const getUserBalanceDAO = async (userID) => {
+    return prisma.users.findUnique({
+        where: {UserID: parseInt(userID, 10)},
+        select: {Balance: true},
+    });
+};
+
+export const updateUserBalanceDAO = async (userID, amount) => {
+    return prisma.users.update({
+        where: {UserID: parseInt(userID, 10)},
+        data: {Balance: amount},
+    });
+};
