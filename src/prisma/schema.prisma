@@ -68,6 +68,7 @@ model cars {
   CreatedAt                  DateTime            @default(now()) @db.Timestamp(0)
   SoldAt                     DateTime?           @db.Timestamp(0)
   images                     Json
+  auctions                   auctions[]
   carmakes                   carmakes?           @relation(fields: [MakeID], references: [MakeID], onDelete: Cascade, map: "cars_ibfk_1")
   carmodels                  carmodels?          @relation(fields: [ModelID], references: [ModelID], onDelete: Cascade, map: "cars_ibfk_2")
   users_cars_SellerIDTousers users?              @relation("cars_SellerIDTousers", fields: [SellerID], references: [UserID], onDelete: Cascade, map: "cars_ibfk_3")
@@ -209,4 +210,10 @@ enum country_made {
   USA
   Germany
   Taiwan
+}
+
+enum auctions_Status {
+  NOT_STARTED
+  OPEN
+  CLOSED
 }
