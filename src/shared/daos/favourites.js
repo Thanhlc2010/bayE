@@ -133,3 +133,20 @@ export const getCarsFavour = async (BuyerID) => {
     }
 };
 
+export const isFavourExists = async (carId, buyerId) => {
+    try {
+        // Kiểm tra xem bản ghi yêu thích có tồn tại hay không
+        const favourExists = await prisma.favourites.findFirst({
+            where: {
+                BuyerID: buyerId,
+                CarID: carId,
+            },
+        });
+
+        // Trả về true nếu tìm thấy, ngược lại false
+        return !!favourExists;
+    } catch (error) {
+        throw new Error('Error checking favour existence: ' + error.message);
+    }
+};
+

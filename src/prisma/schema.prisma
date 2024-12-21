@@ -68,7 +68,6 @@ model cars {
   CreatedAt                  DateTime            @default(now()) @db.Timestamp(0)
   SoldAt                     DateTime?           @db.Timestamp(0)
   images                     Json
-  auctions                   auctions[]
   carmakes                   carmakes?           @relation(fields: [MakeID], references: [MakeID], onDelete: Cascade, map: "cars_ibfk_1")
   carmodels                  carmodels?          @relation(fields: [ModelID], references: [ModelID], onDelete: Cascade, map: "cars_ibfk_2")
   users_cars_SellerIDTousers users?              @relation("cars_SellerIDTousers", fields: [SellerID], references: [UserID], onDelete: Cascade, map: "cars_ibfk_3")
@@ -76,6 +75,7 @@ model cars {
   cartags                    cartags[]
   favourites                 favourites[]
   testdriverequests          testdriverequests[]
+  auctions                   auctions[]
 
   @@index([BuyerID], map: "BuyerID")
   @@index([MakeID], map: "MakeID")
@@ -118,16 +118,18 @@ model testdriverequests {
 }
 
 model users {
-  UserID                    Int                 @id @default(autoincrement()) @db.UnsignedInt
-  Email                     String              @unique(map: "Email") @db.VarChar(255)
-  PasswordHash              String              @db.Text
-  Name                      String?             @db.VarChar(100)
-  Role                      users_Role          @default(BUYER)
-  Phone                     String?             @db.VarChar(13)
-  CreatedAt                 DateTime?           @default(now()) @db.Timestamp(0)
-  Address                   String?             @db.VarChar(255)
-  ProfilePicture            String?             @db.VarChar(255)
-  dateOfBirth               DateTime            @default(now()) @db.Timestamp(0)
+  UserID       Int        @id @default(autoincrement()) @db.UnsignedInt
+  Email        String     @unique(map: "Email") @db.VarChar(255)
+  PasswordHash String     @db.Text
+  Name         String?    @db.VarChar(100)
+  Role         users_Role @default(BUYER)
+  Phone        String?    @db.VarChar(13)
+  CreatedAt    DateTime?  @default(now()) @db.Timestamp(0)
+
+  dateOfBirth    DateTime @default(now()) @db.Timestamp(0)
+  ProfilePicture String?  @db.VarChar(255)
+  Address        String?  @db.VarChar(255)
+
   cars_cars_SellerIDTousers cars[]              @relation("cars_SellerIDTousers")
   cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
   favourites                favourites[]
@@ -136,15 +138,17 @@ model users {
 }
 
 model auctions {
-  AuctionID    Int             @id @default(autoincrement()) @db.UnsignedInt
-  CarID        Int             @db.UnsignedInt
-  StartTime    DateTime        @db.Timestamp(0)
-  Duration     Int             @db.UnsignedInt
-  EndTime      DateTime        @db.Timestamp(0)
-  InitialPrice Decimal?        @db.Decimal(20, 2)
-  Status       auctions_Status @default(OPEN)
-  TopUser      Int?            @db.UnsignedInt
-  cars         cars            @relation(fields: [CarID], references: [CarID], onDelete: Cascade)
+  AuctionID    Int            @id @default(autoincrement()) @db.UnsignedInt
+  Title        String         @db.VarChar(255)
+  CarID        Int            @db.UnsignedInt
+  StartTime    DateTime       @db.Timestamp(0)
+  Duration     Int            @db.UnsignedInt
+  EndTime      DateTime       @db.Timestamp(0)
+  InitialPrice Decimal?       @db.Decimal(20, 2)
+  Status       auction_status @default(NOT_STARTED)
+  TopUser      Int?           @db.UnsignedInt
+
+  cars         cars           @relation(fields: [CarID], references: [CarID], onDelete: Cascade)
   usersAuction usersAuction[]
 
   @@index([CarID], map: "CarID")
@@ -154,11 +158,18 @@ model usersAuction {
   AuctionID Int      @db.UnsignedInt
   UserID    Int      @db.UnsignedInt
   CreatedAt DateTime @default(now()) @db.Timestamp(0)
-  auctions  auctions @relation(fields: [AuctionID], references: [AuctionID], onDelete: Cascade)
-  users     users    @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+
+  auctions auctions @relation(fields: [AuctionID], references: [AuctionID], onDelete: Cascade)
+  users    users    @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
 
   @@id([AuctionID, UserID])
   @@index([UserID], map: "UserID")
+}
+
+enum auction_status {
+  NOT_STARTED
+  OPEN
+  CLOSED
 }
 
 enum status {
@@ -197,10 +208,4 @@ enum country_made {
   USA
   Germany
   Taiwan
-}
-
-enum auctions_Status {
-  OPEN
-  CLOSED
-  FAILED
 }
