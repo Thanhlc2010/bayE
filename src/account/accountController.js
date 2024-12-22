@@ -91,18 +91,13 @@ export const userProfile = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        console.log('Received request to update user profile:', req.body);
         await checkDatabaseConnection();
         const { id } = req.params;
         const { email, name, address } = req.body;
-        console.log('Received request to update user profile:', email, name, address);
         let profilePicture;
-        console.log(id);
 
         if (req.files && req.files['image']) {
             const img = req.files['image'][0];
-            console.log(req.files['image']);
-
             // Upload profile picture to Cloudinary
             const result = await uploadProfilePicture(img.path);
             console.log('Profile picture uploaded successfully:', result);
