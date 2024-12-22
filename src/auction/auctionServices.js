@@ -1,4 +1,4 @@
-import {addBuyerToAuctionDAO, createAuctionDAO, getAuctionDAO} from '../shared/daos/auctions.js';
+import {addBuyerToAuctionDAO, createAuctionDAO, getAuctionByIdDAO, getAuctionDAO} from '../shared/daos/auctions.js';
 import prisma from "../prisma/prismaClient.js";
 import { getUserProfile } from '../account/accountService.js';
 
