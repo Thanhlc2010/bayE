@@ -1,5 +1,6 @@
 import {addBuyerToAuctionDAO, createAuctionDAO, getAuctionByIdDAO, getAuctionDAO} from '../shared/daos/auctions.js';
 import prisma from "../prisma/prismaClient.js";
+import { getUserProfile } from '../account/accountService.js';
 
 // Service function to create an auction
 export const createAuctionService = async (auctionData) => {
@@ -77,9 +78,11 @@ export const participateInAuctionService = async (auctionID, userID) => {
     if (existingParticipant) {
         throw new Error('You are already participating in this auction');
     }
+    await addBuyerToAuctionDAO(auctionID, userID);
+    const userInfo = await getUserProfile(userID)
 
     // Add the buyer to the auction
-    return await addBuyerToAuctionDAO(auctionID, userID);
+    return {userInfo: userInfo, auctionID: auctionID}
 };
 
 export const getAuctionByIdService = async (auctionID) => {
@@ -88,7 +91,14 @@ export const getAuctionByIdService = async (auctionID) => {
     if (!auction) {
         throw new Error('Auction not found');
     }
-
+    const participants = auction.usersAuction.map((ua) => ({
+        UserID: ua.UserID,
+        Name: ua.users.Name,
+    }))
+    const participantsInfo = await Promise.all(
+        participants.map((participant) => getUserProfile(participant.UserID))
+    );
+    
     return {
         AuctionID: auction.AuctionID,
         Title: auction.Title,
@@ -98,9 +108,6 @@ export const getAuctionByIdService = async (auctionID) => {
         InitialPrice: auction.InitialPrice,
         Status: auction.Status,
         Duration: auction.Duration,
-        Participants: auction.usersAuction.map((ua) => ({
-            UserID: ua.UserID,
-            Name: ua.users.Name,
-        })),
+        Participants: participantsInfo,
     };
 };
