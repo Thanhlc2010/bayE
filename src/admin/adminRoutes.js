@@ -11,4 +11,10 @@ router.get('/users', verifyToken, verifyAdminRole, userList);
 // [GET] /api/admin/cars
 router.get('/cars', verifyToken, verifyAdminRole, carList);
 
+// [DELETE] /api/admin/cars/:id
+router.delete('/cars/:id', verifyToken, verifyAdminRole, carList);
+
+// [DELETE] /api/admin/users/:id
+router.delete('/users/:id', verifyToken, verifyAdminRole, userList);
+
 export default router;

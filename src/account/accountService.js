@@ -135,6 +135,27 @@ export const updatePassword = async (userId, oldPassword, newPassword) => {
     }
 }
 
+export const checkTokenValidity = async (userId) => {
+    try {
+        // Find user by ID
+        const user = await findUserById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        return {
+            id: user.UserID,
+            email: user.Email,
+            name: user.Name,
+            role: user.Role,
+            phone: user.Phone,
+            profilePicture: user.ProfilePicture || null,
+        };
+    } catch (error) {
+        throw new Error('Error checking token validity: ' + error.message);
+    }
+}
+
 // export const deleteUser = async (userId) => {
 //     try {
 //         // Delete user by ID
