@@ -48,7 +48,7 @@ export const loginUser = async (email, password) => {
             phone: user.Phone,
             address: user.Address || null,
             profilePicture: user.ProfilePicture || null,
-            balance: user.Balance || nul
+            balance: user.Balance || null
         };
     } catch (error) {
         throw new Error('Error logging in user: ' + error.message);
