@@ -15,6 +15,7 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT;
+console.log(PORT);
 httpServer.listen(PORT);
 
 export {io}

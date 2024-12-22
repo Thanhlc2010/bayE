@@ -12,7 +12,7 @@ let redisInstance;
   });
 
   redis.on("error", function (err) {
-    console.log("Connected redis Error " + err);
+    // console.log("Connected redis Error " + err);
   });
   redisInstance = redis;
 })();
