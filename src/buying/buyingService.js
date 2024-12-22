@@ -1,7 +1,7 @@
 import {getAllCarsDAO, getCarByIdDAO} from "../shared/daos/cars.js";
 
 // Service function to get all cars
-export const getCarsService = async ({ filter = {}, sortBy = 'CarID', order = 'asc' }) => {
+export const getCarsService = async ({ filter = {}, sortBy, order}) => {
     try {
         // Call the DAO layer to fetch data
         const cars = await getAllCarsDAO({ filter, sortBy, order });

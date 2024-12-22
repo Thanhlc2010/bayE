@@ -128,6 +128,7 @@ model users {
   Address                   String?             @db.VarChar(255)
   ProfilePicture            String?             @db.VarChar(255)
   dateOfBirth               DateTime            @default(now()) @db.Timestamp(0)
+  Balance                   Decimal             @default(0.00) @db.Decimal(20, 2)
   cars_cars_SellerIDTousers cars[]              @relation("cars_SellerIDTousers")
   cars_cars_BuyerIDTousers  cars[]              @relation("cars_BuyerIDTousers")
   favourites                favourites[]
@@ -136,15 +137,16 @@ model users {
 }
 
 model auctions {
-  AuctionID    Int             @id @default(autoincrement()) @db.UnsignedInt
-  CarID        Int             @db.UnsignedInt
-  StartTime    DateTime        @db.Timestamp(0)
-  Duration     Int             @db.UnsignedInt
-  EndTime      DateTime        @db.Timestamp(0)
-  InitialPrice Decimal?        @db.Decimal(20, 2)
-  Status       auctions_Status @default(OPEN)
-  TopUser      Int?            @db.UnsignedInt
-  cars         cars            @relation(fields: [CarID], references: [CarID], onDelete: Cascade)
+  AuctionID    Int            @id @default(autoincrement()) @db.UnsignedInt
+  CarID        Int            @db.UnsignedInt
+  StartTime    DateTime       @db.Timestamp(0)
+  Duration     Int            @db.UnsignedInt
+  EndTime      DateTime       @db.Timestamp(0)
+  InitialPrice Decimal?       @db.Decimal(20, 2)
+  Status       auction_status @default(NOT_STARTED)
+  TopUser      Int?           @db.UnsignedInt
+  Title        String         @db.VarChar(255)
+  cars         cars           @relation(fields: [CarID], references: [CarID], onDelete: Cascade)
   usersAuction usersAuction[]
 
   @@index([CarID], map: "CarID")
@@ -159,6 +161,12 @@ model usersAuction {
 
   @@id([AuctionID, UserID])
   @@index([UserID], map: "UserID")
+}
+
+enum auction_status {
+  NOT_STARTED
+  OPEN
+  CLOSED
 }
 
 enum status {
@@ -197,10 +205,4 @@ enum country_made {
   USA
   Germany
   Taiwan
-}
-
-enum auctions_Status {
-  NOT_STARTED
-  OPEN
-  CLOSED
 }

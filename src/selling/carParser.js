@@ -20,14 +20,15 @@ class Car {
         this.previousOwners = parseInt(data?.detail?.previousOwners) || 0;
         this.licensePlate = data?.detail?.licensePlate || '';
         this.registrationStatus = data?.detail?.registrationStatus || '';
-        this.madeIn = data?.detail?.madeIn.trim() || '';
+        this.madeIn = data?.detail?.madeIn.replace(/ /g, "") || '';
         this.brand = data?.detail?.brand || '';
         this.carLine = data?.detail?.carLine || '';
         this.factoryYear = parseInt(data?.detail?.factoryYear) || '';
         this.engineCapacity = data?.detail?.engineCapacity || '';
         this.seatNumber = parseInt(data?.detail?.seatNumber) || 0;
         this.numberOfDoors = parseInt(data?.detail?.numberOfDoors) || 0;
-        this.weight = parseInt(data?.detail?.weight) || '';
+        this.weight = data?.detail?.weight || '';
+        this.sellerId = data.sellerId
     }
 
     // Method to get the flattened data
@@ -56,7 +57,8 @@ class Car {
             engineCapacity: this.engineCapacity,
             seatNumber: this.seatNumber,
             numberOfDoors: this.numberOfDoors,
-            weight: this.weight
+            weight: this.weight,
+            sellerId: this.sellerId
         };
     }
 
