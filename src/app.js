@@ -50,9 +50,9 @@ app.use('/api/users', userBalanceRoutes);
 app.use('/api', imageRoutes);
 
 app.use('/api/', auctionRoute)
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "src/dist", "index.html"));
-});
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "src/dist", "index.html"));
+// });
 app.get('/api', (req, res) => {
     console.log('test')
     res.send("Hello world")

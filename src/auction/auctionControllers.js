@@ -84,7 +84,7 @@ export const participateInAuction = async (req, res) => {
 export const getAuctionById = async (req, res) => {
     try {
         const { id } = req.params;
-
+        console.log(id)
         if (!id) {
             return res.status(400).json({ error: 'Auction ID is required' });
         }
