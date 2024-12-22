@@ -51,3 +51,10 @@ export const getAuctionByIdDAO = async (auctionID) => {
         },
     });
 };
+
+export const updateAuctionStatusDAO = async (auctionID, status) => {
+    return prisma.auctions.update({
+        where: { AuctionID: parseInt(auctionID, 10) },
+        data: { Status: status },
+    });
+};

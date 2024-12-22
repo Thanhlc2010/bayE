@@ -2,7 +2,7 @@ import {
     createAuctionService,
     getAuctionByIdService,
     getAuctionService,
-    participateInAuctionService
+    participateInAuctionService, updateAuctionStatusService
 } from './auctionServices.js';
 import prisma from '../prisma/prismaClient.js';
 import { io } from '../ws.js';
@@ -98,5 +98,26 @@ export const getAuctionById = async (req, res) => {
     } catch (error) {
         console.error('Error in getAuction:', error.message);
         res.status(404).json({ error: error.message });
+    }
+};
+
+export const updateAuctionStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!id || !status) {
+            return res.status(400).json({ error: 'Auction ID and status are required' });
+        }
+
+        const updatedAuction = await updateAuctionStatusService(parseInt(id, 10), status);
+
+        res.status(200).json({
+            message: 'Auction status updated successfully',
+            data: updatedAuction,
+        });
+    } catch (error) {
+        console.error('Error in updateAuctionStatus:', error.message);
+        res.status(400).json({ error: error.message });
     }
 };

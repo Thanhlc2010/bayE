@@ -1,4 +1,10 @@
-import {addBuyerToAuctionDAO, createAuctionDAO, getAuctionByIdDAO, getAuctionDAO} from '../shared/daos/auctions.js';
+import {
+    addBuyerToAuctionDAO,
+    createAuctionDAO,
+    getAuctionByIdDAO,
+    getAuctionDAO,
+    updateAuctionStatusDAO
+} from '../shared/daos/auctions.js';
 import prisma from "../prisma/prismaClient.js";
 import { getUserProfile } from '../account/accountService.js';
 
@@ -110,4 +116,20 @@ export const getAuctionByIdService = async (auctionID) => {
         Duration: auction.Duration,
         Participants: participantsInfo,
     };
+};
+
+export const updateAuctionStatusService = async (auctionID, status) => {
+    const validStatuses = ['NOT_STARTED', 'OPEN', 'CLOSED', 'FAILED'];
+
+    if (!validStatuses.includes(status)) {
+        throw new Error(`Invalid status. Valid statuses are: ${validStatuses.join(', ')}`);
+    }
+
+    const updatedAuction = await updateAuctionStatusDAO(auctionID, status);
+
+    if (!updatedAuction) {
+        throw new Error('Auction not found');
+    }
+
+    return updatedAuction;
 };
