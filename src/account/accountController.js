@@ -99,15 +99,16 @@ export const updateUser = async (req, res) => {
         let profilePicture;
         console.log(id);
 
-        const img = req.files['image'][0];
-        console.log(req.files['image']);
+        if (req.files && req.files['image']) {
+            const img = req.files['image'][0];
+            console.log(req.files['image']);
 
-        if (req.files['image']) {
             // Upload profile picture to Cloudinary
             const result = await uploadProfilePicture(img.path);
             console.log('Profile picture uploaded successfully:', result);
             profilePicture = result;
         }
+
 
         const UserId = parseInt(id, 10);
 
