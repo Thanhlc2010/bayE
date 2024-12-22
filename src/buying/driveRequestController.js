@@ -1,9 +1,9 @@
 import express from 'express';
-import { createDriveRequest } from '../shared/daos/testDriveRequests.js';
+import { createDriveRequest, getDriveRequestsByCarId } from '../shared/daos/testDriveRequests.js';
 
 const router = express.Router();
 
-// Route to delete a favourite
+// Route to create a drive request
 router.post('/driveRequest', async (req, res) => {
     const { FormData } = req.body;
 
@@ -13,9 +13,27 @@ router.post('/driveRequest', async (req, res) => {
 
     try {
         const result = await createDriveRequest(FormData);
-        res.status(200).json({ message: 'create Drive Request successfully', data: result });
+        res.status(200).json({ message: 'Create Drive Request successfully', data: result });
     } catch (error) {
         res.status(500).json({ error: 'Failed to create Drive Request', details: error.message });
+    }
+});
+
+// Route to get drive requests by car ID
+router.get('/driveRequests/:carId', async (req, res) => {
+    const { carId } = req.params;
+
+    if (!carId) {
+        return res.status(400).json({ error: 'Car ID is required' });
+    }
+
+    try {
+        const driveRequests = await getDriveRequestsByCarId(carId);
+        
+        // Return an empty array instead of a 404 if no drive requests are found
+        res.status(200).json({ data: driveRequests || [] });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch drive requests', details: error.message });
     }
 });
 

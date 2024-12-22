@@ -151,7 +151,7 @@ export const getUserBidding = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.status(200).json({ profilePicture: user.profilePicture, name: user.name, userId: userId });
+        res.status(200).json({ user });
     } catch (error) {
         console.error('Error getting user profile:', error.message);
         res.status(500).json({ error: error.message });
