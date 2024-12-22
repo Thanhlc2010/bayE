@@ -23,19 +23,38 @@ export const findAllUsers = async () => {
 export const findAllCars = async () => {
     try {
         const cars = await prisma.cars.findMany({
-            select: {
-                CarID: true,
-                MakeID: true,
-                ModelID: true,
-                FactoryYear: true,
-                Price: true,
-                SellerID: true,
-                BuyerID: true,
-                CreatedAt: true,
+            include: {
+                carmakes: {
+                    select: {
+                        Name: true, // Include car make name
+                    },
+                },
+                carmodels: {
+                    select: {
+                        Name: true, // Include car model name
+                    },
+                },
+                users_cars_SellerIDTousers: {
+                    select: {
+                        UserID: true,
+                        Email: true,
+                        Name: true,
+                    },
+                },
+                users_cars_BuyerIDTousers: {
+                    select: {
+                        UserID: true,
+                        Email: true,
+                        Name: true,
+                    },
+                },
             },
         });
         return cars;
     } catch (error) {
-        throw new Error('Error getting car list: ' + error.message);
+        console.error('Error in adminDAO.findAllCars:', error.message);
+        throw error; // Pass the error back to the service layer
+    } finally {
+        await prisma.$disconnect(); // Disconnect Prisma client
     }
 };

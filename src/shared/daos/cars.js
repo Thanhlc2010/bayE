@@ -186,6 +186,20 @@ export const searchCarsByKeywordDAO = async (keyword) => {
     });
 };
 
+export const deleteCar = async (carId) => {
+    try {
+        const car = await prisma.cars.delete({
+            where: {
+                CarID: parseInt(carId),
+            },
+        });
+        return car;
+    } catch (error) {
+        console.error('Error deleting car:', error.message);
+        throw error;
+    }
+}
+
 export const getCarBySellerDAO = async (seller_id) => {
     console.log({seller_id})
     return await prisma.cars.findMany({
