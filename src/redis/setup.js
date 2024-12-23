@@ -5,6 +5,15 @@ let redisInstance;
     host: process.env.REDIS_HOST,
     port: parseInt(process.env.REDIS_PORT),
     db: 0,
+    maxRetriesPerRequest: 50, // Increase this limit
+    retryStrategy: (times) => {
+      if (times > 50) {
+        // Stop retrying after 50 attempts
+        return null;
+      }
+      // Delay between retries (e.g., 100ms, increasing exponentially)
+      return Math.min(times * 100, 3000);
+    },
   });
 
   redis.on("connect", function () {
